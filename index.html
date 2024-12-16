@@ -18,39 +18,60 @@
       font-size: 1.5em;
       margin-top: 20px;
     }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+    }
   </style>
 </head>
 <body>
   <h1>산타의 인사</h1>
-  <!-- 여기에 산타 캐릭터 영상 또는 이미지 넣기 -->
   <div class="video-container">
-    <!-- 예: 산타 이미지(영상이 없으면 이미지로 대체) -->
-    <video src="santa.mp4" autoplay loop muted playsinline style="max-width:100%;"></video>
->
-    <!-- 실제 영상이 있다면 <video src="santa.mp4" controls></video> 형태로 사용 -->
+    <!-- autoplay, muted 제거 -->
+    <video id="myVideo" src="santa.mp4" playsinline style="max-width:100%;"></video>
   </div>
 
   <div class="name-message" id="nameMessage">여기에 이름이 표시될 예정</div>
+
+  <!-- 재생 버튼 추가 -->
+  <button id="playBtn">소리와 함께 재생하기</button>
 
   <script>
     // URL에서 name 파라미터 추출
     const params = new URLSearchParams(window.location.search);
     const nameParam = params.get('name');
 
-    // nameParam이 있을 경우 화면에 표시
     const nameMessage = document.getElementById('nameMessage');
+    const video = document.getElementById('myVideo');
+    const playBtn = document.getElementById('playBtn');
+
     if (nameParam) {
       nameMessage.textContent = `${nameParam}님, 메리 크리스마스!`;
-      
-      // 음성으로도 이름을 말해주기 (브라우저에서 지원하는 경우)
+
+      // 음성합성 (사용자 상호작용 없이 자동재생은 제약이 있을 수 있으나 우선 그대로 두거나, 버튼 클릭 시 음성을 재생하도록 변경 가능)
       if ('speechSynthesis' in window) {
-        const utter = new SpeechSynthesisUtterance(`${nameParam}님, 메리 크리스마스!`);
-        utter.lang = 'ko-KR';
-        speechSynthesis.speak(utter);
+        // 음성합성도 버튼 클릭 시에 재생하도록 하는 것이 모바일에서 확실합니다.
+        // 여기서는 영상 재생 버튼 클릭 후 음성도 함께 나오도록 할 수 있습니다.
       }
     } else {
       nameMessage.textContent = "이름이 없습니다. URL에 ?name=이름 형태로 접근해주세요.";
     }
+
+    // 재생 버튼 클릭 이벤트
+    playBtn.addEventListener('click', () => {
+      // 동영상 재생
+      video.play().then(() => {
+        // 재생 성공 시 음성도 여기서 재생 가능
+        if (nameParam && 'speechSynthesis' in window) {
+          const utter = new SpeechSynthesisUtterance(`${nameParam}님, 메리 크리스마스!`);
+          utter.lang = 'ko-KR';
+          speechSynthesis.speak(utter);
+        }
+      }).catch(err => {
+        console.error('영상 재생 실패:', err);
+      });
+    });
   </script>
 </body>
 </html>
