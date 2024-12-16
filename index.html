@@ -12,7 +12,8 @@
       padding: 0;
       font-family: 'Noto Sans KR', sans-serif; 
       text-align: center;
-      background: linear-gradient(to bottom, #00172a, #f0f0f0);
+      /* 배경: 화려한 그라디언트 (위쪽: 어두운 밤하늘, 아래쪽: 새벽빛) */
+      background: linear-gradient(to bottom, #000028 20%, #0a053e 50%, #f0f0f0 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -20,12 +21,13 @@
       justify-content: flex-start;
       position: relative;
       overflow: hidden;
+      color: #fff;
     }
 
     h1 {
-      color: #fff;
-      margin-top: 30px;
-      text-shadow: 0 0 10px rgba(255,255,255,0.7);
+      margin-top: 40px;
+      font-size: 2em;
+      text-shadow: 0 0 10px rgba(255,255,255,0.9);
     }
 
     .video-container {
@@ -48,7 +50,6 @@
     .name-message {
       font-size: 1.5em;
       margin-top: 20px;
-      color: #fff;
       text-shadow: 0 0 5px rgba(255,255,255,0.7);
     }
 
@@ -56,48 +57,70 @@
       margin-top: 20px;
       padding: 12px 30px;
       font-size: 1em;
-      background: #e53935;
+      background: #ff3e3e;
       color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       font-weight: 700;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      transition: background 0.3s;
+      box-shadow: 0 2px 10px rgba(255,60,60,0.7);
+      transition: background 0.3s, transform 0.2s;
     }
     button:hover {
-      background: #c62828;
+      background: #d83636;
+      transform: scale(1.05);
     }
 
-    /* 눈 내리는 효과 (단순한 원을 떨어뜨리는 애니메이션) */
+    /* 눈 내리는 효과 강화 */
     .snowflake {
       position: absolute;
       top: -10px;
       color: #fff;
-      font-size: 1em;
+      font-size: 1.2em;
       opacity: 0.8;
       animation: fall 10s linear infinite;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
     }
 
     @keyframes fall {
-      0% { transform: translateY(-10px); opacity: 0.8; }
-      100% { transform: translateY(110vh); opacity: 0; }
+      0% { transform: translateY(-10px) translateX(0); opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
     }
 
-    /* 다양한 크기와 위치의 눈송이 생성 */
+    /* 다양한 snowflake 크기와 속도 변경 */
     .snowflake:nth-child(odd) {
       font-size: 0.8em;
       animation-duration: 8s;
-      animation-delay: 0s;
     }
     .snowflake:nth-child(even) {
-      font-size: 1.2em;
+      font-size: 1.5em;
       animation-duration: 12s;
       animation-delay: 2s;
     }
 
-    /* 랜덤 위치를 위해 JS에서 위치를 지정할 예정이지만, 
-       간단히 여러 snowflake를 배치해도 됨 */
+    /* 배경 트리, 루돌프 이미지 */
+    .bg-decoration {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* 트리 이미지 */
+    .christmas-tree {
+      bottom: 0;
+      left: 5%;
+      height: 40%;
+      max-height: 400px;
+    }
+
+    /* 루돌프 이미지 */
+    .rudolph {
+      bottom: 0;
+      right: 5%;
+      height: 30%;
+      max-height: 300px;
+    }
   </style>
 </head>
 <body>
@@ -109,16 +132,21 @@
   <div class="name-message" id="nameMessage">여기에 이름이 표시될 예정</div>
   <button id="playBtn">소리와 함께 재생하기</button>
 
-  <!-- 눈송이 요소들을 몇 개 추가 -->
-  <div class="snowflake" style="left:10%;">❄</div>
-  <div class="snowflake" style="left:20%;">❄</div>
-  <div class="snowflake" style="left:30%;">❅</div>
-  <div class="snowflake" style="left:40%;">❄</div>
-  <div class="snowflake" style="left:50%;">❅</div>
-  <div class="snowflake" style="left:60%;">❄</div>
-  <div class="snowflake" style="left:70%;">❅</div>
-  <div class="snowflake" style="left:80%;">❄</div>
-  <div class="snowflake" style="left:90%;">❅</div>
+  <!-- 눈송이: 더 많게 -->
+  <div class="snowflake" style="left:5%;">❄</div>
+  <div class="snowflake" style="left:15%;">❅</div>
+  <div class="snowflake" style="left:25%;">❄</div>
+  <div class="snowflake" style="left:35%;">❅</div>
+  <div class="snowflake" style="left:45%;">❄</div>
+  <div class="snowflake" style="left:55%;">❆</div>
+  <div class="snowflake" style="left:65%;">❄</div>
+  <div class="snowflake" style="left:75%;">❅</div>
+  <div class="snowflake" style="left:85%;">❆</div>
+  <div class="snowflake" style="left:95%;">❄</div>
+
+  <!-- 배경 장식 -->
+  <img class="bg-decoration christmas-tree" src="https://raw.githubusercontent.com/exampleuser/assets/main/christmas_tree.png" alt="크리스마스 트리">
+  <img class="bg-decoration rudolph" src="https://raw.githubusercontent.com/exampleuser/assets/main/rudolph.png" alt="루돌프">
 
   <script>
     // URL에서 name 파라미터 추출
