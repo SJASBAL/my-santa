@@ -28,13 +28,12 @@
 <body>
   <h1>산타의 인사</h1>
   <div class="video-container">
-    <!-- autoplay, muted 제거 -->
+    <!-- 오디오가 있는 영상 재생을 위해 autoplay, muted 제거 -->
     <video id="myVideo" src="santa.mp4" playsinline style="max-width:100%;"></video>
   </div>
 
   <div class="name-message" id="nameMessage">여기에 이름이 표시될 예정</div>
 
-  <!-- 재생 버튼 추가 -->
   <button id="playBtn">소리와 함께 재생하기</button>
 
   <script>
@@ -48,25 +47,17 @@
 
     if (nameParam) {
       nameMessage.textContent = `${nameParam}님, 메리 크리스마스!`;
-
-      // 음성합성 (사용자 상호작용 없이 자동재생은 제약이 있을 수 있으나 우선 그대로 두거나, 버튼 클릭 시 음성을 재생하도록 변경 가능)
-      if ('speechSynthesis' in window) {
-        // 음성합성도 버튼 클릭 시에 재생하도록 하는 것이 모바일에서 확실합니다.
-        // 여기서는 영상 재생 버튼 클릭 후 음성도 함께 나오도록 할 수 있습니다.
-      }
     } else {
       nameMessage.textContent = "이름이 없습니다. URL에 ?name=이름 형태로 접근해주세요.";
     }
 
-    // 재생 버튼 클릭 이벤트
+    // 재생 버튼 클릭 시 영상 재생
     playBtn.addEventListener('click', () => {
-      // 동영상 재생
-      video.play().then(() => {
-        }
-      }).catch(err => {
+      video.play().catch(err => {
         console.error('영상 재생 실패:', err);
       });
     });
   </script>
 </body>
 </html>
+
