@@ -62,11 +62,6 @@
     playBtn.addEventListener('click', () => {
       // 동영상 재생
       video.play().then(() => {
-        // 재생 성공 시 음성도 여기서 재생 가능
-        if (nameParam && 'speechSynthesis' in window) {
-          const utter = new SpeechSynthesisUtterance(`${nameParam}님, 메리 크리스마스!`);
-          utter.lang = 'ko-KR';
-          speechSynthesis.speak(utter);
         }
       }).catch(err => {
         console.error('영상 재생 실패:', err);
